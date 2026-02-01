@@ -1,0 +1,82 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: shelfs-postgres
+    environment:
+      POSTGRES_DB: shelfsdb
+      POSTGRES_USER: shelfsuser
+      POSTGRES_PASSWORD: shelfspass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - shelfs-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shelfsuser -d shelfsdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shelfs-api
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shelfsdb
+      SPRING_DATASOURCE_USERNAME: shelfsuser
+      SPRING_DATASOURCE_PASSWORD: shelfspass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - shelfs-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/api/health/live",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # pgAdmin (Optional - for database management)
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   container_name: shelfs-pgadmin
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@shelfs.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #     PGADMIN_CONFIG_SERVER_MODE: "False"
+  #   ports:
+  #     - "5050:80"
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - shelfs-network
+  #   restart: unless-stopped
+  #   profiles:
+  #     - tools
+
+networks:
+  shelfs-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
