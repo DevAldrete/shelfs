@@ -38,6 +38,22 @@ public class Loan {
   @CreatedDate
   private LocalDateTime createdAt;
 
-  @Column(nullable = false)
+  @Column(nullable = false, updatable = false)
   private LocalDateTime limitAt;
+
+  @Column(nullable = true)
+  private LocalDateTime returnedAt;
+
+  public boolean isActive() {
+    return returnedAt == null;
+  }
+
+  public boolean isOverdue() {
+    return isActive() && LocalDateTime.now().isAfter(limitAt);
+  }
+
+  public boolean isOverdue(LocalDateTime currentTime) {
+    return isActive() && currentTime.isAfter(limitAt);
+  }
+
 }
