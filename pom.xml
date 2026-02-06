@@ -13,7 +13,15 @@
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring.boot.version>3.2.0</spring.boot.version>
+    <lombok.version>edge-SNAPSHOT</lombok.version>
   </properties>
+
+  <repositories>
+    <repository>
+      <id>projectlombok.org</id>
+      <url>https://projectlombok.org/edge-releases</url>
+    </repository>
+  </repositories>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -64,6 +72,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
       <optional>true</optional>
     </dependency>
 
@@ -128,6 +137,25 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>1.5.5.Final</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

@@ -2,6 +2,8 @@ package com.devaldrete.dto;
 
 import java.time.LocalDateTime;
 
+import com.devaldrete.domain.BookStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +17,6 @@ public class BookItemDTO {
   private Long id;
   private String barcode;
   private BookDefinitionDTO bookDefinition;
-  private String status;
+  private BookStatus status;
   private LocalDateTime acquisitionDate;
 }

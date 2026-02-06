@@ -1,6 +1,6 @@
 package com.devaldrete.domain;
 
-enum BookStatus {
+public enum BookStatus {
   AVAILABLE,
   BORROWED,
   LOST,
