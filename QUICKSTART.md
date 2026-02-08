@@ -7,10 +7,12 @@ Get the Shelfs API up and running in under 2 minutes!
 Choose ONE of the following:
 
 ### Option A: Docker (Easiest)
+
 - Docker Desktop installed and running
 - That's it!
 
 ### Option B: Local Development
+
 - Java 17 or higher
 - Maven 3.6+
 
@@ -23,6 +25,7 @@ chmod +x docker-setup.sh && ./docker-setup.sh
 ```
 
 That's it! The script will:
+
 - ✅ Build the application
 - ✅ Start PostgreSQL database
 - ✅ Start the API server
@@ -58,9 +61,11 @@ make run     # Runs the app locally
 Once started, open these URLs in your browser:
 
 ### Health Check
-http://localhost:8080/api/health
+
+<http://localhost:8080/api/health>
 
 Expected response:
+
 ```json
 {
   "status": "UP",
@@ -76,7 +81,8 @@ Expected response:
 ```
 
 ### Swagger UI (Interactive API Docs)
-http://localhost:8080/swagger-ui.html
+
+<http://localhost:8080/swagger-ui.html>
 
 ### Test the API
 
@@ -111,17 +117,21 @@ curl http://localhost:8080/api/users -u admin:admin
 ## What's Next?
 
 ### 1. Explore the API
-- Open Swagger UI: http://localhost:8080/swagger-ui.html
+
+- Open Swagger UI: <http://localhost:8080/swagger-ui.html>
 - Try out the endpoints interactively
 
 ### 2. View the Database
+
 If using H2 (local development):
-- URL: http://localhost:8080/h2-console
+
+- URL: <http://localhost:8080/h2-console>
 - JDBC URL: `jdbc:h2:mem:shelfsdb`
 - Username: `sa`
 - Password: (leave empty)
 
 If using PostgreSQL with pgAdmin:
+
 ```bash
 # Start pgAdmin
 docker-compose --profile tools up -d
