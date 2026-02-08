@@ -33,6 +33,31 @@ public class UserController {
     return ResponseEntity.ok(user);
   }
 
+  /**
+   * Get a user by their email address.
+   * Primary workflow for library staff looking up members.
+   *
+   * @param email the email address to search for
+   * @return the user
+   */
+  @GetMapping("/email/{email}")
+  public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
+    UserDTO user = userService.getUserByEmail(email);
+    return ResponseEntity.ok(user);
+  }
+
+  /**
+   * Get a user by their username.
+   *
+   * @param username the username to search for
+   * @return the user
+   */
+  @GetMapping("/username/{username}")
+  public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
+    UserDTO user = userService.getUserByUsername(username);
+    return ResponseEntity.ok(user);
+  }
+
   @PostMapping
   public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
     UserDTO createdUser = userService.createUser(userDTO);

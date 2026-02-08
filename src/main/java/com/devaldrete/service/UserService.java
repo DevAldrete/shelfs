@@ -75,6 +75,35 @@ public class UserService {
     userRepository.delete(user);
   }
 
+  /**
+   * Retrieves a user by their email address.
+   * Useful for library staff to look up members by email.
+   *
+   * @param email the email address to search for
+   * @return the user as a DTO
+   * @throws ResourceNotFoundException if no user exists with the given email
+   */
+  @Transactional(readOnly = true)
+  public UserDTO getUserByEmail(String email) {
+    User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+    return convertToDTO(user);
+  }
+
+  /**
+   * Retrieves a user by their username.
+   *
+   * @param username the username to search for
+   * @return the user as a DTO
+   * @throws ResourceNotFoundException if no user exists with the given username
+   */
+  @Transactional(readOnly = true)
+  public UserDTO getUserByUsername(String username) {
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    return convertToDTO(user);
+  }
+
   private UserDTO convertToDTO(User user) {
     return new UserDTO(user.getId(), user.getUsername(), user.getEmail());
   }

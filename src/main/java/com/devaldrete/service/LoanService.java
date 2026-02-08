@@ -217,6 +217,39 @@ public class LoanService {
   }
 
   /**
+   * Retrieves all active loans for a user by their email address.
+   * Useful for library staff to look up a member's current loans.
+   *
+   * @param email the user's email address
+   * @return list of active loans for the user
+   * @throws ResourceNotFoundException if no user exists with the given email
+   */
+  @Transactional(readOnly = true)
+  public List<LoanDTO> getActiveLoansForUserByEmail(String email) {
+    User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+    return loanRepository.findByUserAndReturnedAtIsNull(user).stream()
+        .map(this::convertToDTO)
+        .toList();
+  }
+
+  /**
+   * Retrieves all loans (active and returned) for a user by their email address.
+   *
+   * @param email the user's email address
+   * @return list of all loans for the user
+   * @throws ResourceNotFoundException if no user exists with the given email
+   */
+  @Transactional(readOnly = true)
+  public List<LoanDTO> getLoansByUserEmail(String email) {
+    User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+    return loanRepository.findByUser(user).stream()
+        .map(this::convertToDTO)
+        .toList();
+  }
+
+  /**
    * Retrieves the loan history for a specific user (returned loans).
    *
    * @param userId the user ID
